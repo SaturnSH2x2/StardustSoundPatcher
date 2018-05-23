@@ -23,6 +23,16 @@ namespace StardustSoundModder
             InitializeComponent();
         }
 
+        private int timeToOffset(int minute, int second, int millisecond)
+        {
+            double totalSeconds = 0.0f;
+            totalSeconds += (minute * 60);
+            totalSeconds += second;
+            totalSeconds += millisecond * 0.001;
+
+            return (int)Math.Round(totalSeconds * 44100);
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             CommonOpenFileDialog fbd = new CommonOpenFileDialog();

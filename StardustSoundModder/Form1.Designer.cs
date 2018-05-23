@@ -32,8 +32,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stardustSoundPatcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.startTimeInput = new System.Windows.Forms.TextBox();
-            this.lengthInput = new System.Windows.Forms.TextBox();
+            this.startTimeMinute = new System.Windows.Forms.TextBox();
             this.startTimeLabel = new System.Windows.Forms.Label();
             this.lengthLabel = new System.Windows.Forms.Label();
             this.playButton = new System.Windows.Forms.Button();
@@ -45,6 +44,19 @@
             this.exportSoundPatchCtrlSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.patchChangesCtrlSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSoundButton = new System.Windows.Forms.Button();
+            this.startTimeSecond = new System.Windows.Forms.TextBox();
+            this.startTimeMs = new System.Windows.Forms.TextBox();
+            this.lengthMinute = new System.Windows.Forms.TextBox();
+            this.lengthSecond = new System.Windows.Forms.TextBox();
+            this.lengthMs = new System.Windows.Forms.TextBox();
+            this.colon1 = new System.Windows.Forms.Label();
+            this.colon2 = new System.Windows.Forms.Label();
+            this.colon3 = new System.Windows.Forms.Label();
+            this.colon4 = new System.Windows.Forms.Label();
+            this.minuteLabel = new System.Windows.Forms.Label();
+            this.secondLabel = new System.Windows.Forms.Label();
+            this.msLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -84,23 +96,14 @@
             this.stardustSoundPatcherToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.stardustSoundPatcherToolStripMenuItem.Text = "Stardust Sound Patcher";
             // 
-            // startTimeInput
+            // startTimeMinute
             // 
-            this.startTimeInput.Location = new System.Drawing.Point(121, 67);
-            this.startTimeInput.Name = "startTimeInput";
-            this.startTimeInput.Size = new System.Drawing.Size(170, 20);
-            this.startTimeInput.TabIndex = 1;
-            this.startTimeInput.Text = "00:00:00";
-            this.startTimeInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // lengthInput
-            // 
-            this.lengthInput.Location = new System.Drawing.Point(121, 93);
-            this.lengthInput.Name = "lengthInput";
-            this.lengthInput.Size = new System.Drawing.Size(170, 20);
-            this.lengthInput.TabIndex = 2;
-            this.lengthInput.Text = "00:00:00";
-            this.lengthInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.startTimeMinute.Location = new System.Drawing.Point(88, 67);
+            this.startTimeMinute.Name = "startTimeMinute";
+            this.startTimeMinute.Size = new System.Drawing.Size(53, 20);
+            this.startTimeMinute.TabIndex = 1;
+            this.startTimeMinute.Text = "0";
+            this.startTimeMinute.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // startTimeLabel
             // 
@@ -162,7 +165,7 @@
             // 
             // patchChangesButton
             // 
-            this.patchChangesButton.Location = new System.Drawing.Point(12, 163);
+            this.patchChangesButton.Location = new System.Drawing.Point(12, 196);
             this.patchChangesButton.Name = "patchChangesButton";
             this.patchChangesButton.Size = new System.Drawing.Size(279, 23);
             this.patchChangesButton.TabIndex = 9;
@@ -194,11 +197,141 @@
             this.patchChangesCtrlSToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
             this.patchChangesCtrlSToolStripMenuItem.Text = "Patch Changes (Ctrl + S)";
             // 
+            // loadSoundButton
+            // 
+            this.loadSoundButton.Location = new System.Drawing.Point(12, 167);
+            this.loadSoundButton.Name = "loadSoundButton";
+            this.loadSoundButton.Size = new System.Drawing.Size(279, 23);
+            this.loadSoundButton.TabIndex = 10;
+            this.loadSoundButton.Text = "Load Sound File...";
+            this.loadSoundButton.UseVisualStyleBackColor = true;
+            // 
+            // startTimeSecond
+            // 
+            this.startTimeSecond.Location = new System.Drawing.Point(163, 67);
+            this.startTimeSecond.Name = "startTimeSecond";
+            this.startTimeSecond.Size = new System.Drawing.Size(53, 20);
+            this.startTimeSecond.TabIndex = 11;
+            this.startTimeSecond.Text = "0";
+            this.startTimeSecond.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // startTimeMs
+            // 
+            this.startTimeMs.Location = new System.Drawing.Point(238, 67);
+            this.startTimeMs.Name = "startTimeMs";
+            this.startTimeMs.Size = new System.Drawing.Size(53, 20);
+            this.startTimeMs.TabIndex = 12;
+            this.startTimeMs.Text = "0";
+            this.startTimeMs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lengthMinute
+            // 
+            this.lengthMinute.Location = new System.Drawing.Point(88, 93);
+            this.lengthMinute.Name = "lengthMinute";
+            this.lengthMinute.Size = new System.Drawing.Size(53, 20);
+            this.lengthMinute.TabIndex = 13;
+            this.lengthMinute.Text = "0";
+            this.lengthMinute.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lengthSecond
+            // 
+            this.lengthSecond.Location = new System.Drawing.Point(163, 93);
+            this.lengthSecond.Name = "lengthSecond";
+            this.lengthSecond.Size = new System.Drawing.Size(53, 20);
+            this.lengthSecond.TabIndex = 14;
+            this.lengthSecond.Text = "0";
+            this.lengthSecond.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lengthMs
+            // 
+            this.lengthMs.Location = new System.Drawing.Point(238, 93);
+            this.lengthMs.Name = "lengthMs";
+            this.lengthMs.Size = new System.Drawing.Size(53, 20);
+            this.lengthMs.TabIndex = 15;
+            this.lengthMs.Text = "0";
+            this.lengthMs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // colon1
+            // 
+            this.colon1.AutoSize = true;
+            this.colon1.Location = new System.Drawing.Point(147, 74);
+            this.colon1.Name = "colon1";
+            this.colon1.Size = new System.Drawing.Size(10, 13);
+            this.colon1.TabIndex = 16;
+            this.colon1.Text = ":";
+            // 
+            // colon2
+            // 
+            this.colon2.AutoSize = true;
+            this.colon2.Location = new System.Drawing.Point(222, 74);
+            this.colon2.Name = "colon2";
+            this.colon2.Size = new System.Drawing.Size(10, 13);
+            this.colon2.TabIndex = 17;
+            this.colon2.Text = ":";
+            // 
+            // colon3
+            // 
+            this.colon3.AutoSize = true;
+            this.colon3.Location = new System.Drawing.Point(147, 100);
+            this.colon3.Name = "colon3";
+            this.colon3.Size = new System.Drawing.Size(10, 13);
+            this.colon3.TabIndex = 18;
+            this.colon3.Text = ":";
+            // 
+            // colon4
+            // 
+            this.colon4.AutoSize = true;
+            this.colon4.Location = new System.Drawing.Point(222, 100);
+            this.colon4.Name = "colon4";
+            this.colon4.Size = new System.Drawing.Size(10, 13);
+            this.colon4.TabIndex = 19;
+            this.colon4.Text = ":";
+            // 
+            // minuteLabel
+            // 
+            this.minuteLabel.AutoSize = true;
+            this.minuteLabel.Location = new System.Drawing.Point(85, 51);
+            this.minuteLabel.Name = "minuteLabel";
+            this.minuteLabel.Size = new System.Drawing.Size(39, 13);
+            this.minuteLabel.TabIndex = 20;
+            this.minuteLabel.Text = "Minute";
+            // 
+            // secondLabel
+            // 
+            this.secondLabel.AutoSize = true;
+            this.secondLabel.Location = new System.Drawing.Point(160, 51);
+            this.secondLabel.Name = "secondLabel";
+            this.secondLabel.Size = new System.Drawing.Size(44, 13);
+            this.secondLabel.TabIndex = 21;
+            this.secondLabel.Text = "Second";
+            // 
+            // msLabel
+            // 
+            this.msLabel.AutoSize = true;
+            this.msLabel.Location = new System.Drawing.Point(235, 51);
+            this.msLabel.Name = "msLabel";
+            this.msLabel.Size = new System.Drawing.Size(59, 13);
+            this.msLabel.TabIndex = 22;
+            this.msLabel.Text = "Millisecond";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(303, 197);
+            this.ClientSize = new System.Drawing.Size(303, 231);
+            this.Controls.Add(this.msLabel);
+            this.Controls.Add(this.secondLabel);
+            this.Controls.Add(this.minuteLabel);
+            this.Controls.Add(this.colon4);
+            this.Controls.Add(this.colon3);
+            this.Controls.Add(this.colon2);
+            this.Controls.Add(this.colon1);
+            this.Controls.Add(this.lengthMs);
+            this.Controls.Add(this.lengthSecond);
+            this.Controls.Add(this.lengthMinute);
+            this.Controls.Add(this.startTimeMs);
+            this.Controls.Add(this.startTimeSecond);
+            this.Controls.Add(this.loadSoundButton);
             this.Controls.Add(this.patchChangesButton);
             this.Controls.Add(this.file31Radio);
             this.Controls.Add(this.file30Radio);
@@ -206,8 +339,7 @@
             this.Controls.Add(this.playButton);
             this.Controls.Add(this.lengthLabel);
             this.Controls.Add(this.startTimeLabel);
-            this.Controls.Add(this.lengthInput);
-            this.Controls.Add(this.startTimeInput);
+            this.Controls.Add(this.startTimeMinute);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -226,8 +358,7 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stardustSoundPatcherToolStripMenuItem;
-        private System.Windows.Forms.TextBox startTimeInput;
-        private System.Windows.Forms.TextBox lengthInput;
+        private System.Windows.Forms.TextBox startTimeMinute;
         private System.Windows.Forms.Label startTimeLabel;
         private System.Windows.Forms.Label lengthLabel;
         private System.Windows.Forms.Button playButton;
@@ -239,6 +370,19 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Button patchChangesButton;
         private System.Windows.Forms.ToolStripMenuItem patchChangesCtrlSToolStripMenuItem;
+        private System.Windows.Forms.Button loadSoundButton;
+        private System.Windows.Forms.TextBox startTimeSecond;
+        private System.Windows.Forms.TextBox startTimeMs;
+        private System.Windows.Forms.TextBox lengthMinute;
+        private System.Windows.Forms.TextBox lengthSecond;
+        private System.Windows.Forms.TextBox lengthMs;
+        private System.Windows.Forms.Label colon1;
+        private System.Windows.Forms.Label colon2;
+        private System.Windows.Forms.Label colon3;
+        private System.Windows.Forms.Label colon4;
+        private System.Windows.Forms.Label minuteLabel;
+        private System.Windows.Forms.Label secondLabel;
+        private System.Windows.Forms.Label msLabel;
     }
 }
 
