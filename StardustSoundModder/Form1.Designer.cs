@@ -57,6 +57,9 @@
             this.minuteLabel = new System.Windows.Forms.Label();
             this.secondLabel = new System.Windows.Forms.Label();
             this.msLabel = new System.Windows.Forms.Label();
+            this.samplingRateTB = new System.Windows.Forms.TextBox();
+            this.samplingRateLabel = new System.Windows.Forms.Label();
+            this.hzLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -125,21 +128,23 @@
             // 
             // playButton
             // 
-            this.playButton.Location = new System.Drawing.Point(12, 133);
+            this.playButton.Location = new System.Drawing.Point(12, 171);
             this.playButton.Name = "playButton";
             this.playButton.Size = new System.Drawing.Size(129, 23);
             this.playButton.TabIndex = 5;
             this.playButton.Text = "Play";
             this.playButton.UseVisualStyleBackColor = true;
+            this.playButton.Click += new System.EventHandler(this.playButton_Click);
             // 
             // stopButton
             // 
-            this.stopButton.Location = new System.Drawing.Point(149, 133);
+            this.stopButton.Location = new System.Drawing.Point(149, 171);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(142, 23);
             this.stopButton.TabIndex = 6;
             this.stopButton.Text = "Stop";
             this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
             // file30Radio
             // 
@@ -151,6 +156,7 @@
             this.file30Radio.TabStop = true;
             this.file30Radio.Text = "File 30";
             this.file30Radio.UseVisualStyleBackColor = true;
+            this.file30Radio.CheckedChanged += new System.EventHandler(this.file30Radio_CheckedChanged);
             // 
             // file31Radio
             // 
@@ -162,10 +168,11 @@
             this.file31Radio.TabStop = true;
             this.file31Radio.Text = "File 31";
             this.file31Radio.UseVisualStyleBackColor = true;
+            this.file31Radio.CheckedChanged += new System.EventHandler(this.file31Radio_CheckedChanged);
             // 
             // patchChangesButton
             // 
-            this.patchChangesButton.Location = new System.Drawing.Point(12, 196);
+            this.patchChangesButton.Location = new System.Drawing.Point(12, 246);
             this.patchChangesButton.Name = "patchChangesButton";
             this.patchChangesButton.Size = new System.Drawing.Size(279, 23);
             this.patchChangesButton.TabIndex = 9;
@@ -199,7 +206,7 @@
             // 
             // loadSoundButton
             // 
-            this.loadSoundButton.Location = new System.Drawing.Point(12, 167);
+            this.loadSoundButton.Location = new System.Drawing.Point(12, 217);
             this.loadSoundButton.Name = "loadSoundButton";
             this.loadSoundButton.Size = new System.Drawing.Size(279, 23);
             this.loadSoundButton.TabIndex = 10;
@@ -314,11 +321,41 @@
             this.msLabel.TabIndex = 22;
             this.msLabel.Text = "Millisecond";
             // 
+            // samplingRateTB
+            // 
+            this.samplingRateTB.Location = new System.Drawing.Point(131, 136);
+            this.samplingRateTB.Name = "samplingRateTB";
+            this.samplingRateTB.Size = new System.Drawing.Size(127, 20);
+            this.samplingRateTB.TabIndex = 23;
+            this.samplingRateTB.Text = "44100";
+            this.samplingRateTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // samplingRateLabel
+            // 
+            this.samplingRateLabel.AutoSize = true;
+            this.samplingRateLabel.Location = new System.Drawing.Point(16, 142);
+            this.samplingRateLabel.Name = "samplingRateLabel";
+            this.samplingRateLabel.Size = new System.Drawing.Size(79, 13);
+            this.samplingRateLabel.TabIndex = 24;
+            this.samplingRateLabel.Text = "Sampling Rate:";
+            // 
+            // hzLabel
+            // 
+            this.hzLabel.AutoSize = true;
+            this.hzLabel.Location = new System.Drawing.Point(265, 142);
+            this.hzLabel.Name = "hzLabel";
+            this.hzLabel.Size = new System.Drawing.Size(20, 13);
+            this.hzLabel.TabIndex = 25;
+            this.hzLabel.Text = "Hz";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(303, 231);
+            this.ClientSize = new System.Drawing.Size(303, 281);
+            this.Controls.Add(this.hzLabel);
+            this.Controls.Add(this.samplingRateLabel);
+            this.Controls.Add(this.samplingRateTB);
             this.Controls.Add(this.msLabel);
             this.Controls.Add(this.secondLabel);
             this.Controls.Add(this.minuteLabel);
@@ -383,6 +420,9 @@
         private System.Windows.Forms.Label minuteLabel;
         private System.Windows.Forms.Label secondLabel;
         private System.Windows.Forms.Label msLabel;
+        private System.Windows.Forms.TextBox samplingRateTB;
+        private System.Windows.Forms.Label samplingRateLabel;
+        private System.Windows.Forms.Label hzLabel;
     }
 }
 
