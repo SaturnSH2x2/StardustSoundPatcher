@@ -50,6 +50,8 @@ namespace StardustSoundModder
 
         float prevAmplification = 1.0f;
 
+        private String workingDirectory;
+
         public Form1()
         {
             InitializeComponent();
@@ -84,16 +86,19 @@ namespace StardustSoundModder
             var mono = new StereoToMonoSampleProvider(ir);
             mono.LeftVolume = 0.0f;
             mono.RightVolume = float.Parse(audioAmplifyTB.Text);
-            WaveFileWriter.CreateWaveFile16("temp.wav", mono);
+            var resampler = new WdlResamplingSampleProvider(mono, Int32.Parse(samplingRateTB.Text));
+            WaveFileWriter.CreateWaveFile16("temp.wav", resampler);
             ir.Close();
 
-            // resample audio
-            ir = new AudioFileReader("temp.wav");
-            var resampler = new WdlResamplingSampleProvider(ir, Int32.Parse(samplingRateTB.Text));
-            WaveFileWriter.CreateWaveFile16("temp2.wav", resampler);
-            ir.Close();
+            // convert audio to 8-bit:  https://stackoverflow.com/questions/6647730/change-wav-file-to-16khz-and-8bit-with-using-naudio
+            var wr = new WaveFileReader("temp.wav");
+            var wf = new WaveFormat(Int32.Parse(samplingRateTB.Text), 8, 1);
+            var cv = new WaveFormatConversionStream(wf, wr);
+            WaveFileWriter.CreateWaveFile("temp2.wav", cv);
+            wr.Close();
+            cv.Dispose();
 
-            File.Delete("temp.wav");
+            //File.Delete("temp.wav");
 
         }
 
@@ -112,6 +117,13 @@ namespace StardustSoundModder
                 else
                     dataToReplace[i + currentStartOffset] = replacementData[i];
             }
+        }
+
+        private void overwriteFiles()
+        {
+            System.IO.File.WriteAllBytes(workingDirectory + "\\30", file30);
+            System.IO.File.WriteAllBytes(workingDirectory + "\\31", file31);
+            MessageBox.Show("The sound files have been patched.");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -138,6 +150,7 @@ namespace StardustSoundModder
                 Application.Exit();
             }
 
+            workingDirectory = fbd.FileName;
             file30Radio.Select();
         }
 
@@ -328,15 +341,20 @@ namespace StardustSoundModder
             if (ofd.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 formatAudio(ofd.FileName);
+            } else
+            {
+                return;
             }
 
             // get raw data
             Stream wavFile = new FileStream("temp2.wav", FileMode.Open);
             BinaryReader br = new BinaryReader(wavFile);
+
             wavFile.Position = 44;
             byte[] audioData = new byte[wavFile.Length - 44];
             for (int i = 0; i < wavFile.Length - 44; i++)
                 audioData[i] = br.ReadByte();
+
             br.Close();
 
             // patch data into the audio
@@ -345,6 +363,12 @@ namespace StardustSoundModder
 
         private void audioAmplifyTB_TextChanged(object sender, EventArgs e)
         {
+            if (audioAmplifyTB.Text.Length == 0)
+            {
+                audioAmplifyTB.Text = "0";
+                return;
+            }
+
             float amplification;
             try
             {
@@ -360,6 +384,24 @@ namespace StardustSoundModder
             }
 
             prevAmplification = amplification;
+        }
+
+        private void patchChangesButton_Click(object sender, EventArgs e)
+        {
+            overwriteFiles();
+        }
+
+        private void patchChangesCtrlSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            overwriteFiles();
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                overwriteFiles();
+            }
         }
     }
 }

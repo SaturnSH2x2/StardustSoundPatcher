@@ -184,6 +184,7 @@
             this.patchChangesButton.TabIndex = 9;
             this.patchChangesButton.Text = "Patch Changes";
             this.patchChangesButton.UseVisualStyleBackColor = true;
+            this.patchChangesButton.Click += new System.EventHandler(this.patchChangesButton_Click);
             // 
             // loadSoundPatchCtrlOToolStripMenuItem
             // 
@@ -209,6 +210,7 @@
             this.patchChangesCtrlSToolStripMenuItem.Name = "patchChangesCtrlSToolStripMenuItem";
             this.patchChangesCtrlSToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
             this.patchChangesCtrlSToolStripMenuItem.Text = "Patch Changes (Ctrl + S)";
+            this.patchChangesCtrlSToolStripMenuItem.Click += new System.EventHandler(this.patchChangesCtrlSToolStripMenuItem_Click);
             // 
             // loadSoundButton
             // 
@@ -432,10 +434,12 @@
             this.Controls.Add(this.startTimeMinute);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Stardust Sound Patcher";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
