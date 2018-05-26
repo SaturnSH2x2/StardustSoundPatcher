@@ -17,18 +17,22 @@ namespace StardustSoundModder
 {
     public partial class Form1 : Form
     {
+        enum WHICHFILE { FILE_30 = 0, FILE_31 = 1 };
+
         // private class for storing useful for data which will be stored in JSON files later on 
         private class audioPatch
         {
             public String fileName;
             public int startOffset;
             public int lengthOffset;
+            public WHICHFILE f;
 
-            public audioPatch(String fileName, int startOffset, int lengthOffset)
+            public audioPatch(String fileName, int startOffset, int lengthOffset, WHICHFILE f)
             {
                 this.fileName = fileName;
                 this.startOffset = startOffset;
                 this.lengthOffset = lengthOffset;
+                this.f = f;
             }
         }
 
@@ -75,9 +79,6 @@ namespace StardustSoundModder
         // function that converts an audio file into mono 8-bit PCM, at the current sampling rate
         private void formatAudio(String filePath)
         {
-            // get degree to amplify audio
-            
-
             // convert to mono
             var ir = new AudioFileReader(filePath);
             var mono = new StereoToMonoSampleProvider(ir);
@@ -239,33 +240,75 @@ namespace StardustSoundModder
             prevSamplingRate = sampleRate;
         }
 
+        // TODO:  text boxes kinda suck here, use NumericUpDown in the future
         private void startTimeSecond_TextChanged(object sender, EventArgs e)
         {
+            try
+            {
+                Int32.Parse(startTimeSecond.Text);
+            } catch (Exception)
+            {
+                samplingRateTB_TextChanged(sender, e);
+            } 
             recalculateOffset();
         }
 
         private void startTimeMs_TextChanged(object sender, EventArgs e)
         {
+            try
+            {
+                Int32.Parse(startTimeMs.Text);
+            } catch (Exception) {
+                samplingRateTB_TextChanged(sender, e);
+            } 
             recalculateOffset();
         }
 
         private void startTimeMinute_TextChanged(object sender, EventArgs e)
         {
+            try
+            {
+                Int32.Parse(startTimeMinute.Text);
+            } catch (Exception)
+            {
+                samplingRateTB_TextChanged(sender, e);
+            }
             recalculateOffset();
         }
 
         private void lengthMinute_TextChanged(object sender, EventArgs e)
         {
+            try
+            {
+                Int32.Parse(lengthMinute.Text);
+            } catch (Exception)
+            {
+                samplingRateTB_TextChanged(sender, e);
+            }
             recalculateOffset();
         }
 
         private void lengthSecond_TextChanged(object sender, EventArgs e)
         {
+            try
+            {
+                Int32.Parse(lengthSecond.Text);
+            } catch (Exception)
+            {
+                samplingRateTB_TextChanged(sender, e);
+            }
             recalculateOffset();
         }
 
         private void lengthMs_TextChanged(object sender, EventArgs e)
         {
+            try
+            {
+                Int32.Parse(lengthMs.Text);
+            } catch(Exception)
+            {
+                samplingRateTB_TextChanged(sender, e);
+            }
             recalculateOffset();
         }
 

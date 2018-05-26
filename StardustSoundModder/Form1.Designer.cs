@@ -62,6 +62,8 @@
             this.hzLabel = new System.Windows.Forms.Label();
             this.audioAmplifyTB = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.patchList = new System.Windows.Forms.ListView();
+            this.patchLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,7 +74,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(303, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(537, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -377,11 +379,30 @@
             this.label1.TabIndex = 27;
             this.label1.Text = "Amplify imported audio by:";
             // 
+            // patchList
+            // 
+            this.patchList.Location = new System.Drawing.Point(315, 51);
+            this.patchList.Name = "patchList";
+            this.patchList.Size = new System.Drawing.Size(210, 268);
+            this.patchList.TabIndex = 28;
+            this.patchList.UseCompatibleStateImageBehavior = false;
+            // 
+            // patchLabel
+            // 
+            this.patchLabel.AutoSize = true;
+            this.patchLabel.Location = new System.Drawing.Point(315, 28);
+            this.patchLabel.Name = "patchLabel";
+            this.patchLabel.Size = new System.Drawing.Size(83, 13);
+            this.patchLabel.TabIndex = 29;
+            this.patchLabel.Text = "Sound Patches:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(303, 338);
+            this.ClientSize = new System.Drawing.Size(537, 338);
+            this.Controls.Add(this.patchLabel);
+            this.Controls.Add(this.patchList);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.audioAmplifyTB);
             this.Controls.Add(this.hzLabel);
@@ -456,6 +477,8 @@
         private System.Windows.Forms.Label hzLabel;
         private System.Windows.Forms.TextBox audioAmplifyTB;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ListView patchList;
+        private System.Windows.Forms.Label patchLabel;
     }
 }
 
