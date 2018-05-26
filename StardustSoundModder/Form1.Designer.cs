@@ -60,6 +60,8 @@
             this.samplingRateTB = new System.Windows.Forms.TextBox();
             this.samplingRateLabel = new System.Windows.Forms.Label();
             this.hzLabel = new System.Windows.Forms.Label();
+            this.audioAmplifyTB = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,7 +72,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(710, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(303, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -173,7 +175,7 @@
             // 
             // patchChangesButton
             // 
-            this.patchChangesButton.Location = new System.Drawing.Point(12, 246);
+            this.patchChangesButton.Location = new System.Drawing.Point(12, 296);
             this.patchChangesButton.Name = "patchChangesButton";
             this.patchChangesButton.Size = new System.Drawing.Size(279, 23);
             this.patchChangesButton.TabIndex = 9;
@@ -207,7 +209,7 @@
             // 
             // loadSoundButton
             // 
-            this.loadSoundButton.Location = new System.Drawing.Point(12, 217);
+            this.loadSoundButton.Location = new System.Drawing.Point(12, 267);
             this.loadSoundButton.Name = "loadSoundButton";
             this.loadSoundButton.Size = new System.Drawing.Size(279, 23);
             this.loadSoundButton.TabIndex = 10;
@@ -356,11 +358,32 @@
             this.hzLabel.TabIndex = 25;
             this.hzLabel.Text = "Hz";
             // 
+            // audioAmplifyTB
+            // 
+            this.audioAmplifyTB.Location = new System.Drawing.Point(144, 221);
+            this.audioAmplifyTB.Name = "audioAmplifyTB";
+            this.audioAmplifyTB.Size = new System.Drawing.Size(147, 20);
+            this.audioAmplifyTB.TabIndex = 26;
+            this.audioAmplifyTB.Text = "1.0";
+            this.audioAmplifyTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.audioAmplifyTB.TextChanged += new System.EventHandler(this.audioAmplifyTB_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 221);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(129, 13);
+            this.label1.TabIndex = 27;
+            this.label1.Text = "Amplify imported audio by:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(710, 281);
+            this.ClientSize = new System.Drawing.Size(303, 338);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.audioAmplifyTB);
             this.Controls.Add(this.hzLabel);
             this.Controls.Add(this.samplingRateLabel);
             this.Controls.Add(this.samplingRateTB);
@@ -431,6 +454,8 @@
         private System.Windows.Forms.TextBox samplingRateTB;
         private System.Windows.Forms.Label samplingRateLabel;
         private System.Windows.Forms.Label hzLabel;
+        private System.Windows.Forms.TextBox audioAmplifyTB;
+        private System.Windows.Forms.Label label1;
     }
 }
 

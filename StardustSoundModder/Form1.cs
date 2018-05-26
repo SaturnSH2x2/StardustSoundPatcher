@@ -44,6 +44,8 @@ namespace StardustSoundModder
         private int currentStartOffset = 0;
         private int currentLengthOffset = 0;
 
+        float prevAmplification = 1.0f;
+
         public Form1()
         {
             InitializeComponent();
@@ -73,11 +75,14 @@ namespace StardustSoundModder
         // function that converts an audio file into mono 8-bit PCM, at the current sampling rate
         private void formatAudio(String filePath)
         {
+            // get degree to amplify audio
+            
+
             // convert to mono
             var ir = new AudioFileReader(filePath);
             var mono = new StereoToMonoSampleProvider(ir);
             mono.LeftVolume = 0.0f;
-            mono.RightVolume = 1.0f;
+            mono.RightVolume = float.Parse(audioAmplifyTB.Text);
             WaveFileWriter.CreateWaveFile16("temp.wav", mono);
             ir.Close();
 
@@ -286,6 +291,25 @@ namespace StardustSoundModder
 
             // patch data into the audio
             patchAudio(audioData);
+        }
+
+        private void audioAmplifyTB_TextChanged(object sender, EventArgs e)
+        {
+            float amplification;
+            try
+            {
+                amplification = float.Parse(audioAmplifyTB.Text);
+            } catch (FormatException)
+            {
+                audioAmplifyTB.Text = prevAmplification.ToString();
+                return;
+            } catch (OverflowException)
+            {
+                audioAmplifyTB.Text = prevAmplification.ToString();
+                return;
+            }
+
+            prevAmplification = amplification;
         }
     }
 }
