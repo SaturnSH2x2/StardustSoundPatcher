@@ -154,10 +154,17 @@ namespace StardustSoundModder
 
             for (int i = 0; i < currentLengthOffset; i++)
             {
-                if (isFile30)
-                    selectedAudio[i] = file30[i + currentStartOffset];
-                else
-                    selectedAudio[i] = file31[i + currentStartOffset];
+                try
+                {
+                    if (isFile30)
+                        selectedAudio[i] = file30[i + currentStartOffset];
+                    else
+                        selectedAudio[i] = file31[i + currentStartOffset];
+                } catch (IndexOutOfRangeException)
+                {
+                    MessageBox.Show("The start time/play length specified exceeds the length of the audio.");
+                    return;
+                }
             }
 
             var ms = new MemoryStream(selectedAudio);
