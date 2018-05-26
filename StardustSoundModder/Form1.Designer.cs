@@ -107,6 +107,7 @@
             this.startTimeMinute.TabIndex = 1;
             this.startTimeMinute.Text = "0";
             this.startTimeMinute.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.startTimeMinute.TextChanged += new System.EventHandler(this.startTimeMinute_TextChanged);
             // 
             // startTimeLabel
             // 
@@ -221,6 +222,7 @@
             this.startTimeSecond.TabIndex = 11;
             this.startTimeSecond.Text = "0";
             this.startTimeSecond.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.startTimeSecond.TextChanged += new System.EventHandler(this.startTimeSecond_TextChanged);
             // 
             // startTimeMs
             // 
@@ -230,6 +232,7 @@
             this.startTimeMs.TabIndex = 12;
             this.startTimeMs.Text = "0";
             this.startTimeMs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.startTimeMs.TextChanged += new System.EventHandler(this.startTimeMs_TextChanged);
             // 
             // lengthMinute
             // 
@@ -239,6 +242,7 @@
             this.lengthMinute.TabIndex = 13;
             this.lengthMinute.Text = "0";
             this.lengthMinute.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.lengthMinute.TextChanged += new System.EventHandler(this.lengthMinute_TextChanged);
             // 
             // lengthSecond
             // 
@@ -248,6 +252,7 @@
             this.lengthSecond.TabIndex = 14;
             this.lengthSecond.Text = "0";
             this.lengthSecond.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.lengthSecond.TextChanged += new System.EventHandler(this.lengthSecond_TextChanged);
             // 
             // lengthMs
             // 
@@ -257,6 +262,7 @@
             this.lengthMs.TabIndex = 15;
             this.lengthMs.Text = "0";
             this.lengthMs.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.lengthMs.TextChanged += new System.EventHandler(this.lengthMs_TextChanged);
             // 
             // colon1
             // 
@@ -329,6 +335,7 @@
             this.samplingRateTB.TabIndex = 23;
             this.samplingRateTB.Text = "44100";
             this.samplingRateTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.samplingRateTB.TextChanged += new System.EventHandler(this.samplingRateTB_TextChanged);
             // 
             // samplingRateLabel
             // 

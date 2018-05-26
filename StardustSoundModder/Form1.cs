@@ -25,12 +25,16 @@ namespace StardustSoundModder
 
         private bool isFile30 = true;
 
+        private int prevSamplingRate = 44100;
+        private int currentStartOffset = 0;
+        private int currentLengthOffset = 0;
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        private int timeToOffset(int minute, int second, int millisecond)
+        private int timeToOffset(int minute, int second, int millisecond, int samplingRate = 0)
         {
             double totalSeconds = 0.0f;
             totalSeconds += (minute * 60);
@@ -38,7 +42,17 @@ namespace StardustSoundModder
             totalSeconds += millisecond * 0.001;
 
             // number of seconds times samples per second to find the proper offset
-            return (int)Math.Round(totalSeconds * Int32.Parse(samplingRateTB.Text));
+            if (samplingRate == 0)
+                return (int)Math.Round(totalSeconds * Int32.Parse(samplingRateTB.Text));
+            else
+                return (int)Math.Round(totalSeconds * samplingRate);
+        }
+
+        // recalculates current time offsets.  Useful for when the sampling rate changes and the times need to be recalculated.
+        private void recalculateOffset()
+        {
+            currentStartOffset = timeToOffset(Int32.Parse(startTimeMinute.Text), Int32.Parse(startTimeSecond.Text), Int32.Parse(startTimeMs.Text));
+            currentLengthOffset = timeToOffset(Int32.Parse(lengthMinute.Text), Int32.Parse(lengthSecond.Text), Int32.Parse(lengthMs.Text));
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -77,17 +91,14 @@ namespace StardustSoundModder
         {
             stopButton_Click(sender, e);
 
-            int startOffset = timeToOffset(Int32.Parse(startTimeMinute.Text), Int32.Parse(startTimeSecond.Text), Int32.Parse(startTimeMs.Text));
-            int lengthBytes = timeToOffset(Int32.Parse(lengthMinute.Text), Int32.Parse(lengthSecond.Text), Int32.Parse(lengthMs.Text));
+            selectedAudio = new byte[currentLengthOffset];
 
-            selectedAudio = new byte[lengthBytes];
-
-            for (int i = 0; i < lengthBytes; i++)
+            for (int i = 0; i < currentLengthOffset; i++)
             {
                 if (isFile30)
-                    selectedAudio[i] = file30[i + startOffset];
+                    selectedAudio[i] = file30[i + currentStartOffset];
                 else
-                    selectedAudio[i] = file31[i + startOffset];
+                    selectedAudio[i] = file31[i + currentStartOffset];
             }
 
             var ms = new MemoryStream(selectedAudio);
@@ -122,6 +133,82 @@ namespace StardustSoundModder
         private void file30Radio_CheckedChanged(object sender, EventArgs e)
         {
             file31Radio_CheckedChanged(sender, e);
+        }
+
+        private void samplingRateTB_TextChanged(object sender, EventArgs e)
+        {
+            if (samplingRateTB.Text.Length == 0)
+            {
+                samplingRateTB.Text = "0";
+                return;
+            }
+
+            int sampleRate;
+            try
+            {
+                sampleRate = Int32.Parse(samplingRateTB.Text);
+                if (sampleRate == 0)
+                    return;
+            } catch (FormatException)
+            {
+                samplingRateTB.Text = prevSamplingRate.ToString();
+                return;
+            } catch (OverflowException)
+            {
+                samplingRateTB.Text = prevSamplingRate.ToString();
+                return;
+            }
+
+            double newStartTime = (float)currentStartOffset / (float)sampleRate;
+            double newLengthTime = (float)currentLengthOffset / (float)sampleRate;
+
+            int startMinute = (int)(newStartTime / 60);
+            int startSecond = (int)(newStartTime % 60);
+            int startMs = (int)(newStartTime % 1) * 100;
+
+            startTimeMinute.Text = startMinute.ToString();
+            startTimeSecond.Text = startSecond.ToString();
+            startTimeMs.Text = startMs.ToString();
+
+            int newLengthMinute = (int)(newLengthTime / 60);
+            int newLengthSecond = (int)(newLengthTime % 60);
+            int newLengthMs = (int)(newStartTime % 1 * 100);
+
+            lengthMinute.Text = newLengthMinute.ToString();
+            lengthSecond.Text = newLengthSecond.ToString();
+            lengthMs.Text = newLengthMs.ToString();
+
+            prevSamplingRate = sampleRate;
+        }
+
+        private void startTimeSecond_TextChanged(object sender, EventArgs e)
+        {
+            recalculateOffset();
+        }
+
+        private void startTimeMs_TextChanged(object sender, EventArgs e)
+        {
+            recalculateOffset();
+        }
+
+        private void startTimeMinute_TextChanged(object sender, EventArgs e)
+        {
+            recalculateOffset();
+        }
+
+        private void lengthMinute_TextChanged(object sender, EventArgs e)
+        {
+            recalculateOffset();
+        }
+
+        private void lengthSecond_TextChanged(object sender, EventArgs e)
+        {
+            recalculateOffset();
+        }
+
+        private void lengthMs_TextChanged(object sender, EventArgs e)
+        {
+            recalculateOffset();
         }
     }
 }
