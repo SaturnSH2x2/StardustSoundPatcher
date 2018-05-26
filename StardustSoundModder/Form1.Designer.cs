@@ -70,7 +70,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(303, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(710, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -213,6 +213,7 @@
             this.loadSoundButton.TabIndex = 10;
             this.loadSoundButton.Text = "Load Sound File...";
             this.loadSoundButton.UseVisualStyleBackColor = true;
+            this.loadSoundButton.Click += new System.EventHandler(this.loadSoundButton_Click);
             // 
             // startTimeSecond
             // 
@@ -359,7 +360,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(303, 281);
+            this.ClientSize = new System.Drawing.Size(710, 281);
             this.Controls.Add(this.hzLabel);
             this.Controls.Add(this.samplingRateLabel);
             this.Controls.Add(this.samplingRateTB);
