@@ -90,14 +90,6 @@ namespace StardustSoundModder
             WaveFileWriter.CreateWaveFile16("temp.wav", resampler);
             ir.Close();
 
-            // convert audio to 8-bit:  https://stackoverflow.com/questions/6647730/change-wav-file-to-16khz-and-8bit-with-using-naudio
-            var wr = new WaveFileReader("temp.wav");
-            var wf = new WaveFormat(Int32.Parse(samplingRateTB.Text), 8, 1);
-            var cv = new WaveFormatConversionStream(wf, wr);
-            WaveFileWriter.CreateWaveFile("temp2.wav", cv);
-            wr.Close();
-            cv.Dispose();
-
             //File.Delete("temp.wav");
 
         }
@@ -263,6 +255,11 @@ namespace StardustSoundModder
         // TODO:  text boxes kinda suck here, use NumericUpDown in the future
         private void startTimeSecond_TextChanged(object sender, EventArgs e)
         {
+            if (startTimeSecond.Text.Length == 0)
+            {
+                startTimeSecond.Text = "0";
+            }
+
             try
             {
                 Int32.Parse(startTimeSecond.Text);
@@ -275,6 +272,11 @@ namespace StardustSoundModder
 
         private void startTimeMs_TextChanged(object sender, EventArgs e)
         {
+            if (startTimeMs.Text.Length == 0)
+            {
+                startTimeMs.Text = "0";
+            }
+
             try
             {
                 Int32.Parse(startTimeMs.Text);
@@ -286,6 +288,11 @@ namespace StardustSoundModder
 
         private void startTimeMinute_TextChanged(object sender, EventArgs e)
         {
+            if (startTimeMinute.Text.Length == 0)
+            {
+                startTimeMinute.Text = "0";
+            }
+
             try
             {
                 Int32.Parse(startTimeMinute.Text);
@@ -298,6 +305,11 @@ namespace StardustSoundModder
 
         private void lengthMinute_TextChanged(object sender, EventArgs e)
         {
+            if (lengthMinute.Text.Length == 0)
+            {
+                lengthMinute.Text = "0";
+            }
+
             try
             {
                 Int32.Parse(lengthMinute.Text);
@@ -310,6 +322,11 @@ namespace StardustSoundModder
 
         private void lengthSecond_TextChanged(object sender, EventArgs e)
         {
+            if (lengthSecond.Text.Length == 0)
+            {
+                lengthSecond.Text = "0";
+            }
+
             try
             {
                 Int32.Parse(lengthSecond.Text);
@@ -322,6 +339,11 @@ namespace StardustSoundModder
 
         private void lengthMs_TextChanged(object sender, EventArgs e)
         {
+            if (lengthMs.Text.Length == 0)
+            {
+                lengthMs.Text = "0";
+            }
+
             try
             {
                 Int32.Parse(lengthMs.Text);
@@ -347,13 +369,16 @@ namespace StardustSoundModder
             }
 
             // get raw data
-            Stream wavFile = new FileStream("temp2.wav", FileMode.Open);
+            Stream wavFile = new FileStream("temp.wav", FileMode.Open);
             BinaryReader br = new BinaryReader(wavFile);
 
             wavFile.Position = 44;
-            byte[] audioData = new byte[wavFile.Length - 44];
-            for (int i = 0; i < wavFile.Length - 44; i++)
-                audioData[i] = br.ReadByte();
+            byte[] audioData = new byte[(wavFile.Length - 44)];
+            for (int i = 0; i < (wavFile.Length - 44); i += 2) {
+                short sixteenBitSample = br.ReadInt16();
+                audioData[i] = (byte)(sixteenBitSample >> 8);
+                audioData[i + 1] = (byte)(sixteenBitSample >> 8);
+            }
 
             br.Close();
 

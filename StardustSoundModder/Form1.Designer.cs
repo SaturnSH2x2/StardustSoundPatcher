@@ -369,7 +369,7 @@
             this.audioAmplifyTB.Name = "audioAmplifyTB";
             this.audioAmplifyTB.Size = new System.Drawing.Size(147, 20);
             this.audioAmplifyTB.TabIndex = 26;
-            this.audioAmplifyTB.Text = "1.0";
+            this.audioAmplifyTB.Text = "0.5";
             this.audioAmplifyTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.audioAmplifyTB.TextChanged += new System.EventHandler(this.audioAmplifyTB_TextChanged);
             // 
