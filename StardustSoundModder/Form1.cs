@@ -102,6 +102,13 @@ namespace StardustSoundModder
                 dataToReplace = file30;
             else
                 dataToReplace = file31;
+
+            if (currentStartOffset + currentLengthOffset > dataToReplace.Length)
+            {
+                MessageBox.Show("Cannot replace audio.  The chunk of time specified is greater than the actual length of audio itself.");
+                return;
+            }
+
             for (int i = 0; i < currentLengthOffset; i++)
             {
                 if (i >= replacementData.Length)
@@ -262,7 +269,11 @@ namespace StardustSoundModder
 
             try
             {
-                Int32.Parse(startTimeSecond.Text);
+                int val = Int32.Parse(startTimeSecond.Text);
+                if (val < 0)
+                {
+                    samplingRateTB_TextChanged(sender, e);
+                }
             } catch (Exception)
             {
                 samplingRateTB_TextChanged(sender, e);
@@ -279,7 +290,11 @@ namespace StardustSoundModder
 
             try
             {
-                Int32.Parse(startTimeMs.Text);
+                int val = Int32.Parse(startTimeMs.Text);
+                if (val < 0)
+                {
+                    samplingRateTB_TextChanged(sender, e);
+                }
             } catch (Exception) {
                 samplingRateTB_TextChanged(sender, e);
             } 
@@ -295,7 +310,11 @@ namespace StardustSoundModder
 
             try
             {
-                Int32.Parse(startTimeMinute.Text);
+                int val = Int32.Parse(startTimeMinute.Text);
+                if (val < 0)
+                {
+                    samplingRateTB_TextChanged(sender, e);
+                }
             } catch (Exception)
             {
                 samplingRateTB_TextChanged(sender, e);
@@ -312,7 +331,11 @@ namespace StardustSoundModder
 
             try
             {
-                Int32.Parse(lengthMinute.Text);
+                int val = Int32.Parse(lengthMinute.Text);
+                if (val < 0)
+                {
+                    samplingRateTB_TextChanged(sender, e);
+                }
             } catch (Exception)
             {
                 samplingRateTB_TextChanged(sender, e);
@@ -329,7 +352,10 @@ namespace StardustSoundModder
 
             try
             {
-                Int32.Parse(lengthSecond.Text);
+                int val = Int32.Parse(lengthSecond.Text);
+                if (val < 0) {
+                    samplingRateTB_TextChanged(sender, e);
+                }
             } catch (Exception)
             {
                 samplingRateTB_TextChanged(sender, e);
@@ -346,7 +372,11 @@ namespace StardustSoundModder
 
             try
             {
-                Int32.Parse(lengthMs.Text);
+                int val = Int32.Parse(lengthMs.Text);
+                if (val < 0)
+                {
+                    samplingRateTB_TextChanged(sender, e);
+                }
             } catch(Exception)
             {
                 samplingRateTB_TextChanged(sender, e);
