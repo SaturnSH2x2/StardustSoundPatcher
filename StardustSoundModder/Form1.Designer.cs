@@ -31,6 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSoundPatchCtrlOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportSoundPatchCtrlSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.patchChangesCtrlSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stardustSoundPatcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startTimeMinute = new System.Windows.Forms.TextBox();
@@ -41,10 +45,6 @@
             this.file30Radio = new System.Windows.Forms.RadioButton();
             this.file31Radio = new System.Windows.Forms.RadioButton();
             this.patchChangesButton = new System.Windows.Forms.Button();
-            this.loadSoundPatchCtrlOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportSoundPatchCtrlSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.patchChangesCtrlSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadSoundButton = new System.Windows.Forms.Button();
             this.startTimeSecond = new System.Windows.Forms.TextBox();
             this.startTimeMs = new System.Windows.Forms.TextBox();
@@ -65,6 +65,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.patchList = new System.Windows.Forms.ListView();
             this.patchLabel = new System.Windows.Forms.Label();
+            this.deleteButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -89,6 +90,32 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            // 
+            // loadSoundPatchCtrlOToolStripMenuItem
+            // 
+            this.loadSoundPatchCtrlOToolStripMenuItem.Name = "loadSoundPatchCtrlOToolStripMenuItem";
+            this.loadSoundPatchCtrlOToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.loadSoundPatchCtrlOToolStripMenuItem.Text = "Load Sound Patch... (Ctrl + O)";
+            // 
+            // exportSoundPatchCtrlSToolStripMenuItem
+            // 
+            this.exportSoundPatchCtrlSToolStripMenuItem.Name = "exportSoundPatchCtrlSToolStripMenuItem";
+            this.exportSoundPatchCtrlSToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.exportSoundPatchCtrlSToolStripMenuItem.Text = "Export Sound Patch... (Ctrl + E)";
+            // 
+            // patchChangesCtrlSToolStripMenuItem
+            // 
+            this.patchChangesCtrlSToolStripMenuItem.Name = "patchChangesCtrlSToolStripMenuItem";
+            this.patchChangesCtrlSToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.patchChangesCtrlSToolStripMenuItem.Text = "Patch Changes (Ctrl + S)";
+            this.patchChangesCtrlSToolStripMenuItem.Click += new System.EventHandler(this.patchChangesCtrlSToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -185,32 +212,6 @@
             this.patchChangesButton.Text = "Patch Changes";
             this.patchChangesButton.UseVisualStyleBackColor = true;
             this.patchChangesButton.Click += new System.EventHandler(this.patchChangesButton_Click);
-            // 
-            // loadSoundPatchCtrlOToolStripMenuItem
-            // 
-            this.loadSoundPatchCtrlOToolStripMenuItem.Name = "loadSoundPatchCtrlOToolStripMenuItem";
-            this.loadSoundPatchCtrlOToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
-            this.loadSoundPatchCtrlOToolStripMenuItem.Text = "Load Sound Patch... (Ctrl + O)";
-            // 
-            // exportSoundPatchCtrlSToolStripMenuItem
-            // 
-            this.exportSoundPatchCtrlSToolStripMenuItem.Name = "exportSoundPatchCtrlSToolStripMenuItem";
-            this.exportSoundPatchCtrlSToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
-            this.exportSoundPatchCtrlSToolStripMenuItem.Text = "Export Sound Patch... (Ctrl + E)";
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // patchChangesCtrlSToolStripMenuItem
-            // 
-            this.patchChangesCtrlSToolStripMenuItem.Name = "patchChangesCtrlSToolStripMenuItem";
-            this.patchChangesCtrlSToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
-            this.patchChangesCtrlSToolStripMenuItem.Text = "Patch Changes (Ctrl + S)";
-            this.patchChangesCtrlSToolStripMenuItem.Click += new System.EventHandler(this.patchChangesCtrlSToolStripMenuItem_Click);
             // 
             // loadSoundButton
             // 
@@ -389,6 +390,7 @@
             this.patchList.Size = new System.Drawing.Size(210, 268);
             this.patchList.TabIndex = 28;
             this.patchList.UseCompatibleStateImageBehavior = false;
+            this.patchList.View = System.Windows.Forms.View.List;
             // 
             // patchLabel
             // 
@@ -399,11 +401,22 @@
             this.patchLabel.TabIndex = 29;
             this.patchLabel.Text = "Sound Patches:";
             // 
+            // deleteButton
+            // 
+            this.deleteButton.Location = new System.Drawing.Point(431, 18);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(94, 23);
+            this.deleteButton.TabIndex = 30;
+            this.deleteButton.Text = "Delete";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(537, 338);
+            this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.patchLabel);
             this.Controls.Add(this.patchList);
             this.Controls.Add(this.label1);
@@ -485,6 +498,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListView patchList;
         private System.Windows.Forms.Label patchLabel;
+        private System.Windows.Forms.Button deleteButton;
     }
 }
 

@@ -19,22 +19,7 @@ namespace StardustSoundModder
     {
         enum WHICHFILE { FILE_30 = 0, FILE_31 = 1 };
 
-        // private class for storing useful for data which will be stored in JSON files later on 
-        private class audioPatch
-        {
-            public String fileName;
-            public int startOffset;
-            public int lengthOffset;
-            public WHICHFILE f;
-
-            public audioPatch(String fileName, int startOffset, int lengthOffset, WHICHFILE f)
-            {
-                this.fileName = fileName;
-                this.startOffset = startOffset;
-                this.lengthOffset = lengthOffset;
-                this.f = f;
-            }
-        }
+        private List<AudioPatch> audioPatches;
 
         private WaveOutEvent outputDevice;
 
@@ -51,6 +36,39 @@ namespace StardustSoundModder
         float prevAmplification = 1.0f;
 
         private String workingDirectory;
+
+
+        // private class for storing useful for data which will be stored in JSON files later on 
+        private class AudioPatch
+        {
+            public String fileName;
+            public int startOffset;
+            public int lengthOffset;
+            public bool isFile30;
+            private string workingDirectory;
+
+            public AudioPatch(String fileName, int startOffset, int lengthOffset, bool isFile30, string workingDirectory)
+            {
+                this.fileName = fileName;
+                this.startOffset = startOffset;
+                this.lengthOffset = lengthOffset;
+                this.isFile30 = isFile30;
+                this.workingDirectory = workingDirectory;
+            }
+
+            public bool equals(AudioPatch that)
+            {
+                return (this.fileName.Equals(that.fileName) &&
+                        this.startOffset == that.startOffset &&
+                        this.lengthOffset == that.lengthOffset &&
+                        this.isFile30 == that.isFile30);
+            }
+
+            public string ToString()
+            {
+                return Path.GetFileName(this.fileName) + ", Start: " + this.startOffset.ToString();
+            }
+        }
 
         public Form1()
         {
@@ -95,7 +113,7 @@ namespace StardustSoundModder
         }
 
         // function to patch out sound data
-        private void patchAudio(byte[] replacementData)
+        private bool patchAudio(byte[] replacementData)
         {
             byte[] dataToReplace;
             if (isFile30)
@@ -106,7 +124,11 @@ namespace StardustSoundModder
             if (currentStartOffset + currentLengthOffset > dataToReplace.Length)
             {
                 MessageBox.Show("Cannot replace audio.  The chunk of time specified is greater than the actual length of audio itself.");
-                return;
+                return false;
+            } else if (currentLengthOffset == 0)
+            {
+                MessageBox.Show("No audio was replaced; the length was set to 0.");
+                return false;
             }
 
             for (int i = 0; i < currentLengthOffset; i++)
@@ -116,6 +138,35 @@ namespace StardustSoundModder
                 else
                     dataToReplace[i + currentStartOffset] = replacementData[i];
             }
+
+            return true;
+        }
+
+        // unpatches audio by replacing bytes with the original audio data
+        private void unpatchAudio(AudioPatch a)
+        {
+            Stream s;
+            byte[] data;
+
+            if (a.isFile30)
+            {
+                s = File.Open(workingDirectory + "\\30", FileMode.Open);
+                data = file30;
+            }
+            else
+            {
+                s = File.Open(workingDirectory + "\\31", FileMode.Open);
+                data = file31;
+            }
+
+            BinaryReader br = new BinaryReader(s);
+            s.Position = a.startOffset - 1;
+            for (int i = a.startOffset; i < a.startOffset + a.lengthOffset; i++)
+            {
+                data[i] = br.ReadByte();
+            }
+
+            br.Close();
         }
 
         private void overwriteFiles()
@@ -123,6 +174,14 @@ namespace StardustSoundModder
             System.IO.File.WriteAllBytes(workingDirectory + "\\30", file30);
             System.IO.File.WriteAllBytes(workingDirectory + "\\31", file31);
             MessageBox.Show("The sound files have been patched.");
+        }
+
+        private void addAudioPatch(AudioPatch a)
+        {
+            ListViewItem i = new ListViewItem();
+            i.Text = a.ToString();
+            i.Tag = a;
+            patchList.Items.Add(i);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -144,13 +203,15 @@ namespace StardustSoundModder
             {
                 MessageBox.Show("An exception occurred: " + ex.Message +
                                 "\nPlease make sure you have all of your\n" +
-                                "files in your jojoban folder, then restart\n" + 
+                                "files in your ROM folder, then restart\n" + 
                                 "the program.");
                 Application.Exit();
             }
 
             workingDirectory = fbd.FileName;
             file30Radio.Select();
+
+            audioPatches = new List<AudioPatch>();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -259,7 +320,6 @@ namespace StardustSoundModder
             prevSamplingRate = sampleRate;
         }
 
-        // TODO:  text boxes kinda suck here, use NumericUpDown in the future
         private void startTimeSecond_TextChanged(object sender, EventArgs e)
         {
             if (startTimeSecond.Text.Length == 0)
@@ -409,11 +469,14 @@ namespace StardustSoundModder
                 audioData[i] = (byte)(sixteenBitSample >> 8);
                 audioData[i + 1] = (byte)(sixteenBitSample >> 8);
             }
-
+        
             br.Close();
 
             // patch data into the audio
-            patchAudio(audioData);
+            if (patchAudio(audioData))
+            {
+                addAudioPatch(new AudioPatch(ofd.FileName, currentStartOffset, currentLengthOffset, isFile30, workingDirectory));
+            }
         }
 
         private void audioAmplifyTB_TextChanged(object sender, EventArgs e)
@@ -456,6 +519,17 @@ namespace StardustSoundModder
             if (e.Control && e.KeyCode == Keys.S)
             {
                 overwriteFiles();
+            }
+        }
+
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
+            foreach (int i in patchList.SelectedIndices)
+            {
+                ListViewItem l = patchList.Items[i];
+                AudioPatch a = (AudioPatch)l.Tag;
+                unpatchAudio(a);
+                patchList.Items.Remove(l);
             }
         }
     }
