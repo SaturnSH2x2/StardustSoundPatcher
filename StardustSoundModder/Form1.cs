@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -114,7 +115,7 @@ namespace StardustSoundModder
         }
 
         // function to patch out sound data
-        private bool patchAudio(byte[] replacementData)
+        private bool patchAudio(byte[] replacementData, int startOffset = 0, int lengthOffset = 0)
         {
             byte[] dataToReplace;
             if (isFile30)
@@ -122,22 +123,22 @@ namespace StardustSoundModder
             else
                 dataToReplace = file31;
 
-            if (currentStartOffset + currentLengthOffset > dataToReplace.Length)
+            if (startOffset + lengthOffset > dataToReplace.Length)
             {
                 MessageBox.Show("Cannot replace audio.  The chunk of time specified is greater than the actual length of audio itself.");
                 return false;
-            } else if (currentLengthOffset == 0)
+            } else if (lengthOffset == 0)
             {
                 MessageBox.Show("No audio was replaced; the length was set to 0.");
                 return false;
             }
 
-            for (int i = 0; i < currentLengthOffset; i++)
+            for (int i = 0; i < lengthOffset; i++)
             {
                 if (i >= replacementData.Length)
-                    dataToReplace[i + currentStartOffset] = 0;
+                    dataToReplace[i + startOffset] = 0;
                 else
-                    dataToReplace[i + currentStartOffset] = replacementData[i];
+                    dataToReplace[i + startOffset] = replacementData[i];
             }
 
             return true;
@@ -224,7 +225,50 @@ namespace StardustSoundModder
             string jsonData = JsonConvert.SerializeObject(jsPatchList);
             File.WriteAllText("temp\\patch.json", jsonData);
 
-            System.IO.Compression.ZipFile.CreateFromDirectory("temp", sfd.FileName);
+            ZipFile.CreateFromDirectory("temp", sfd.FileName);
+        }
+
+        private void loadPatch(string pathName)
+        {
+            patchList.Items.Clear();
+            List<AudioPatch> jsPatchList;
+
+            // reset audio data
+            file30 = File.ReadAllBytes(workingDirectory + "\\30");
+            file31 = File.ReadAllBytes(workingDirectory + "\\31");
+
+            try
+            {
+                Directory.Delete("temp", true);
+            } catch (DirectoryNotFoundException) { }
+
+            Directory.CreateDirectory("temp");
+            ZipFile.ExtractToDirectory(pathName, "temp");
+
+            string jsonData;
+
+            try
+            {
+                jsonData = File.ReadAllText("temp\\patch.json");
+            } catch (FileNotFoundException)
+            {
+                MessageBox.Show("This zip file does not contain valid patch information.");
+                return;
+            }
+
+            jsPatchList = JsonConvert.DeserializeObject<List<AudioPatch>>(jsonData);
+
+            foreach (AudioPatch a in jsPatchList)
+            {
+                // probably didn't read correctly
+                if (a.fileName == null)
+                    continue;
+
+                loadSound("temp\\" + a.fileName, a.startOffset, a.lengthOffset, a.audioAmplify);
+                addAudioPatch(a);
+            }
+
+            Directory.Delete("temp", true);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -495,14 +539,14 @@ namespace StardustSoundModder
             // format audio
             if (ofd.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                loadSound(ofd.FileName);
+                loadSound(ofd.FileName, currentStartOffset, currentLengthOffset);
             } else
             {
                 return;
             }
         }
 
-        private void loadSound(string fileName, float audioAmplify = 0)
+        private void loadSound(string fileName, int startOffset = 0, int lengthOffset = 0, float audioAmplify = 0)
         {
             if (audioAmplify == 0)
                 audioAmplify = float.Parse(audioAmplifyTB.Text);
@@ -525,7 +569,7 @@ namespace StardustSoundModder
             br.Close();
 
             // patch data into the audio
-            if (patchAudio(audioData))
+            if (patchAudio(audioData, startOffset, lengthOffset))
             {
                 addAudioPatch(new AudioPatch(fileName, currentStartOffset, currentLengthOffset, isFile30, float.Parse(audioAmplifyTB.Text)));
             }
@@ -588,6 +632,17 @@ namespace StardustSoundModder
         private void exportSoundPatchCtrlSToolStripMenuItem_Click(object sender, EventArgs e)
         {
             savePatch();
+        }
+
+        private void loadSoundPatchCtrlOToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = ".zip files (*.zip)|*.zip";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                loadPatch(ofd.FileName);
+            }
         }
     }
 }

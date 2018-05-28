@@ -76,7 +76,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(537, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(547, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -96,6 +96,7 @@
             this.loadSoundPatchCtrlOToolStripMenuItem.Name = "loadSoundPatchCtrlOToolStripMenuItem";
             this.loadSoundPatchCtrlOToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
             this.loadSoundPatchCtrlOToolStripMenuItem.Text = "Load Sound Patch... (Ctrl + O)";
+            this.loadSoundPatchCtrlOToolStripMenuItem.Click += new System.EventHandler(this.loadSoundPatchCtrlOToolStripMenuItem_Click);
             // 
             // exportSoundPatchCtrlSToolStripMenuItem
             // 
@@ -416,7 +417,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(537, 338);
+            this.ClientSize = new System.Drawing.Size(547, 338);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.patchLabel);
             this.Controls.Add(this.patchList);
