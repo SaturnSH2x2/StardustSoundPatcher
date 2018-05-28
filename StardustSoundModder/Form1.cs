@@ -48,14 +48,16 @@ namespace StardustSoundModder
             public int lengthOffset;
             public bool isFile30;
             public float audioAmplify;
+            public int samplingRate;
 
-            public AudioPatch(String fileName, int startOffset, int lengthOffset, bool isFile30, float audioAmplify)
+            public AudioPatch(String fileName, int startOffset, int lengthOffset, bool isFile30, float audioAmplify, int samplingRate)
             {
                 this.fileName = fileName;
                 this.startOffset = startOffset;
                 this.lengthOffset = lengthOffset;
                 this.isFile30 = isFile30;
                 this.audioAmplify = audioAmplify;
+                this.samplingRate = samplingRate;
             }
 
             public bool equals(AudioPatch that)
@@ -98,15 +100,44 @@ namespace StardustSoundModder
             currentLengthOffset = timeToOffset(Int32.Parse(lengthMinute.Text), Int32.Parse(lengthSecond.Text), Int32.Parse(lengthMs.Text));
         }
 
+        private void loadSound(string fileName, bool if30, int startOffset, int lengthOffset, float audioAmplify, int sRate)
+        {
+            if (audioAmplify == 0)
+                audioAmplify = float.Parse(audioAmplifyTB.Text);
+
+            formatAudio(fileName, audioAmplify, sRate);
+
+            // get raw data
+            Stream wavFile = new FileStream("temp.wav", FileMode.Open);
+            BinaryReader br = new BinaryReader(wavFile);
+
+            wavFile.Position = 44;
+            byte[] audioData = new byte[(wavFile.Length - 44)];
+            for (int i = 0; i < (wavFile.Length - 44); i += 2)
+            {
+                short sixteenBitSample = br.ReadInt16();
+                audioData[i] = (byte)(sixteenBitSample >> 8);
+                audioData[i + 1] = (byte)(sixteenBitSample >> 8);
+            }
+
+            br.Close();
+
+            // patch data into the audio
+            if (patchAudio(audioData, startOffset, lengthOffset))
+            {
+                addAudioPatch(new AudioPatch(fileName, startOffset, lengthOffset, if30, audioAmplify, sRate));
+            }
+        }
+
         // function that converts an audio file into mono 8-bit PCM, at the current sampling rate
-        private void formatAudio(String filePath, float audioAmplify)
+        private void formatAudio(String filePath, float audioAmplify, int samplingRate)
         {
             // convert to mono
             var ir = new AudioFileReader(filePath);
             var mono = new StereoToMonoSampleProvider(ir);
             mono.LeftVolume = 0.0f;
             mono.RightVolume = audioAmplify;
-            var resampler = new WdlResamplingSampleProvider(mono, Int32.Parse(samplingRateTB.Text));
+            var resampler = new WdlResamplingSampleProvider(mono, samplingRate);
             WaveFileWriter.CreateWaveFile16("temp.wav", resampler);
             ir.Close();
 
@@ -225,7 +256,16 @@ namespace StardustSoundModder
             string jsonData = JsonConvert.SerializeObject(jsPatchList);
             File.WriteAllText("temp\\patch.json", jsonData);
 
-            ZipFile.CreateFromDirectory("temp", sfd.FileName);
+            try
+            {
+                ZipFile.CreateFromDirectory("temp", sfd.FileName);
+            } catch (System.IO.IOException)
+            {
+                File.Delete(sfd.FileName);
+                ZipFile.CreateFromDirectory("temp", sfd.FileName);
+            }
+
+            Directory.Delete("temp", true);
         }
 
         private void loadPatch(string pathName)
@@ -263,8 +303,10 @@ namespace StardustSoundModder
                 // probably didn't read correctly
                 if (a.fileName == null)
                     continue;
+                if (a.lengthOffset == 0)
+                    continue;
 
-                loadSound("temp\\" + a.fileName, a.startOffset, a.lengthOffset, a.audioAmplify);
+                loadSound("temp\\" + a.fileName, a.isFile30, a.startOffset, a.lengthOffset, a.audioAmplify, a.samplingRate);
                 addAudioPatch(a);
             }
 
@@ -295,7 +337,13 @@ namespace StardustSoundModder
                 Application.Exit();
             }
 
-            workingDirectory = fbd.FileName;
+            try
+            {
+                workingDirectory = fbd.FileName;
+            } catch (System.InvalidOperationException)
+            {
+                Application.Exit();
+            }
             file30Radio.Select();
 
             audioPatches = new List<AudioPatch>();
@@ -533,45 +581,16 @@ namespace StardustSoundModder
 
         private void loadSoundButton_Click(object sender, EventArgs e)
         {
-            CommonOpenFileDialog ofd = new CommonOpenFileDialog();
-            ofd.RestoreDirectory = true;
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = ".mp3 files (*.mp3)|*.mp3|.wav files (*.wav)|*.wav|.aiff files (*.aiff)|*.aiff";
 
             // format audio
-            if (ofd.ShowDialog() == CommonFileDialogResult.Ok)
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
-                loadSound(ofd.FileName, currentStartOffset, currentLengthOffset);
+                loadSound(ofd.FileName, isFile30, currentStartOffset, currentLengthOffset, float.Parse(audioAmplifyTB.Text), Int32.Parse(samplingRateTB.Text));
             } else
             {
                 return;
-            }
-        }
-
-        private void loadSound(string fileName, int startOffset = 0, int lengthOffset = 0, float audioAmplify = 0)
-        {
-            if (audioAmplify == 0)
-                audioAmplify = float.Parse(audioAmplifyTB.Text);
-
-            formatAudio(fileName, audioAmplify);
-
-            // get raw data
-            Stream wavFile = new FileStream("temp.wav", FileMode.Open);
-            BinaryReader br = new BinaryReader(wavFile);
-
-            wavFile.Position = 44;
-            byte[] audioData = new byte[(wavFile.Length - 44)];
-            for (int i = 0; i < (wavFile.Length - 44); i += 2)
-            {
-                short sixteenBitSample = br.ReadInt16();
-                audioData[i] = (byte)(sixteenBitSample >> 8);
-                audioData[i + 1] = (byte)(sixteenBitSample >> 8);
-            }
-
-            br.Close();
-
-            // patch data into the audio
-            if (patchAudio(audioData, startOffset, lengthOffset))
-            {
-                addAudioPatch(new AudioPatch(fileName, currentStartOffset, currentLengthOffset, isFile30, float.Parse(audioAmplifyTB.Text)));
             }
         }
 
@@ -615,7 +634,15 @@ namespace StardustSoundModder
             if (e.Control && e.KeyCode == Keys.S)
             {
                 overwriteFiles();
+            } else if (e.Control && e.KeyCode == Keys.O)
+            {
+                loadSoundPatchCtrlOToolStripMenuItem_Click(sender, e);
+            } else if (e.Control && e.KeyCode == Keys.E)
+            {
+                exportSoundPatchCtrlSToolStripMenuItem_Click(sender, e);
             }
+
+            
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -643,6 +670,16 @@ namespace StardustSoundModder
             {
                 loadPatch(ofd.FileName);
             }
+        }
+
+        private void loadSoundPatchButton_Click(object sender, EventArgs e)
+        {
+            loadSoundPatchCtrlOToolStripMenuItem_Click(sender, e);
+        }
+
+        private void exportSoundPatchButton_Click(object sender, EventArgs e)
+        {
+            exportSoundPatchCtrlSToolStripMenuItem_Click(sender, e);
         }
     }
 }

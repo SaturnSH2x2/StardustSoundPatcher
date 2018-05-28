@@ -66,6 +66,8 @@
             this.patchList = new System.Windows.Forms.ListView();
             this.patchLabel = new System.Windows.Forms.Label();
             this.deleteButton = new System.Windows.Forms.Button();
+            this.loadSoundPatchButton = new System.Windows.Forms.Button();
+            this.exportSoundPatchButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,7 +78,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(547, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(548, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -130,8 +132,8 @@
             // stardustSoundPatcherToolStripMenuItem
             // 
             this.stardustSoundPatcherToolStripMenuItem.Name = "stardustSoundPatcherToolStripMenuItem";
-            this.stardustSoundPatcherToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.stardustSoundPatcherToolStripMenuItem.Text = "Stardust Sound Patcher";
+            this.stardustSoundPatcherToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.stardustSoundPatcherToolStripMenuItem.Text = "Stardust Sound Patcher...";
             // 
             // startTimeMinute
             // 
@@ -389,7 +391,7 @@
             // 
             this.patchList.Location = new System.Drawing.Point(315, 51);
             this.patchList.Name = "patchList";
-            this.patchList.Size = new System.Drawing.Size(210, 268);
+            this.patchList.Size = new System.Drawing.Size(210, 210);
             this.patchList.TabIndex = 28;
             this.patchList.UseCompatibleStateImageBehavior = false;
             this.patchList.View = System.Windows.Forms.View.List;
@@ -413,11 +415,33 @@
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
+            // loadSoundPatchButton
+            // 
+            this.loadSoundPatchButton.Location = new System.Drawing.Point(315, 267);
+            this.loadSoundPatchButton.Name = "loadSoundPatchButton";
+            this.loadSoundPatchButton.Size = new System.Drawing.Size(210, 23);
+            this.loadSoundPatchButton.TabIndex = 31;
+            this.loadSoundPatchButton.Text = "Load Sound Patch...";
+            this.loadSoundPatchButton.UseVisualStyleBackColor = true;
+            this.loadSoundPatchButton.Click += new System.EventHandler(this.loadSoundPatchButton_Click);
+            // 
+            // exportSoundPatchButton
+            // 
+            this.exportSoundPatchButton.Location = new System.Drawing.Point(315, 296);
+            this.exportSoundPatchButton.Name = "exportSoundPatchButton";
+            this.exportSoundPatchButton.Size = new System.Drawing.Size(210, 23);
+            this.exportSoundPatchButton.TabIndex = 32;
+            this.exportSoundPatchButton.Text = "Export Sound Patch...";
+            this.exportSoundPatchButton.UseVisualStyleBackColor = true;
+            this.exportSoundPatchButton.Click += new System.EventHandler(this.exportSoundPatchButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(547, 338);
+            this.ClientSize = new System.Drawing.Size(548, 326);
+            this.Controls.Add(this.exportSoundPatchButton);
+            this.Controls.Add(this.loadSoundPatchButton);
             this.Controls.Add(this.deleteButton);
             this.Controls.Add(this.patchLabel);
             this.Controls.Add(this.patchList);
@@ -503,6 +527,8 @@
         private System.Windows.Forms.ListView patchList;
         private System.Windows.Forms.Label patchLabel;
         private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.Button loadSoundPatchButton;
+        private System.Windows.Forms.Button exportSoundPatchButton;
     }
 }
 
