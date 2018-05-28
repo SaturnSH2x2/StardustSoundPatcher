@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using Newtonsoft.Json;
 
 namespace StardustSoundModder
 {
@@ -181,7 +182,7 @@ namespace StardustSoundModder
             foreach (ListViewItem ls in patchList.Items)
             {
                 AudioPatch a1 = (AudioPatch)ls.Tag;
-                if (a1.equals(a))
+                if (a1.startOffset == a.startOffset)
                 {
                     patchList.Items.Remove(ls);
                 }
@@ -191,6 +192,39 @@ namespace StardustSoundModder
             i.Text = a.ToString();
             i.Tag = a;
             patchList.Items.Add(i);
+        }
+
+        private void savePatch()
+        {
+            List<AudioPatch> jsPatchList = new List<AudioPatch>();
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "ZIP files (*.zip)|*.zip";
+
+            if (sfd.ShowDialog() != DialogResult.OK)
+                return;
+
+            // delete old temporary directory, if there
+            try
+            {
+                Directory.Delete("temp", true);
+            }
+            catch (DirectoryNotFoundException) { }
+                
+
+            Directory.CreateDirectory("temp");
+            foreach (ListViewItem li in patchList.Items)
+            {
+                AudioPatch a = (AudioPatch)li.Tag;
+                File.Copy(a.fileName, "temp\\" + Path.GetFileName(a.fileName));
+                a.fileName = Path.GetFileName(a.fileName);
+                jsPatchList.Add(a);
+            }
+
+            string jsonData = JsonConvert.SerializeObject(jsPatchList);
+            File.WriteAllText("temp\\patch.json", jsonData);
+
+            System.IO.Compression.ZipFile.CreateFromDirectory("temp", sfd.FileName);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -549,6 +583,11 @@ namespace StardustSoundModder
                 unpatchAudio(a);
                 patchList.Items.Remove(l);
             }
+        }
+
+        private void exportSoundPatchCtrlSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            savePatch();
         }
     }
 }

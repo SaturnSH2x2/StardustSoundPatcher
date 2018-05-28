@@ -102,6 +102,7 @@
             this.exportSoundPatchCtrlSToolStripMenuItem.Name = "exportSoundPatchCtrlSToolStripMenuItem";
             this.exportSoundPatchCtrlSToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
             this.exportSoundPatchCtrlSToolStripMenuItem.Text = "Export Sound Patch... (Ctrl + E)";
+            this.exportSoundPatchCtrlSToolStripMenuItem.Click += new System.EventHandler(this.exportSoundPatchCtrlSToolStripMenuItem_Click);
             // 
             // patchChangesCtrlSToolStripMenuItem
             // 
