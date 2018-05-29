@@ -134,12 +134,25 @@ namespace StardustSoundModder
         {
             // convert to mono
             var ir = new AudioFileReader(filePath);
-            var mono = new StereoToMonoSampleProvider(ir);
-            mono.LeftVolume = 0.0f;
-            mono.RightVolume = audioAmplify;
-            var resampler = new WdlResamplingSampleProvider(mono, samplingRate);
-            WaveFileWriter.CreateWaveFile16("temp.wav", resampler);
-            ir.Close();
+
+
+            try
+            {
+                var mono = new StereoToMonoSampleProvider(ir);
+                mono.LeftVolume = 0.0f;
+                mono.RightVolume = audioAmplify;
+                var resampler = new WdlResamplingSampleProvider(mono, samplingRate);
+                WaveFileWriter.CreateWaveFile16("temp.wav", resampler);
+                ir.Close();
+            } catch (System.ArgumentException)
+            {
+                var resampler = new WdlResamplingSampleProvider(ir, samplingRate);
+                WaveFileWriter.CreateWaveFile16("temp.wav", resampler);
+                ir.Close();
+            }
+
+            
+            
 
             //File.Delete("temp.wav");
 
