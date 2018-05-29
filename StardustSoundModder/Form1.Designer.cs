@@ -134,6 +134,7 @@
             this.stardustSoundPatcherToolStripMenuItem.Name = "stardustSoundPatcherToolStripMenuItem";
             this.stardustSoundPatcherToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.stardustSoundPatcherToolStripMenuItem.Text = "Stardust Sound Patcher...";
+            this.stardustSoundPatcherToolStripMenuItem.Click += new System.EventHandler(this.stardustSoundPatcherToolStripMenuItem_Click);
             // 
             // startTimeMinute
             // 

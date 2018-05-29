@@ -681,5 +681,11 @@ namespace StardustSoundModder
         {
             exportSoundPatchCtrlSToolStripMenuItem_Click(sender, e);
         }
+
+        private void stardustSoundPatcherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox ab = new AboutBox();
+            ab.Show();
+        }
     }
 }
